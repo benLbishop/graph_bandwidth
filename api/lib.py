@@ -23,6 +23,9 @@ def getWindowsForDevice(device_uuid, end_time, window_time, num_windows):
         cur_window = makeEmptyWindow(cur_window_start_time)
         cur_idx = getWindowsStartIdx(start_idx, device_uuid, cur_window_start_time + window_time)
         while True:
+            # check to see if we've reached num_windows
+            if (len(completed_windows) == num_windows):
+                break
             if cur_idx == len(BANDWIDTHS):
                 break
             cur_data = BANDWIDTHS[cur_idx]
@@ -31,9 +34,6 @@ def getWindowsForDevice(device_uuid, end_time, window_time, num_windows):
             cur_time = cur_data[TIME_KEY]
             if (cur_time < cur_window[TIME_KEY]):
                 completed_windows.append(cur_window.copy())
-                # check to see if we've reached num_windows
-                if (len(completed_windows) == num_windows):
-                    break
                 # reset current window
                 cur_window_start_time -= window_time
                 cur_window = makeEmptyWindow(cur_window_start_time)
